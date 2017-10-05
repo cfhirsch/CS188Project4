@@ -148,18 +148,23 @@ class ExactInference(InferenceModule):
         emissionModel = busters.getObservationDistribution(noisyDistance)
         pacmanPosition = gameState.getPacmanPosition()
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
         # Replace this code with a correct observation update
         # Be sure to handle the "jail" edge case where the ghost is eaten
         # and noisyDistance is None
         allPossible = util.Counter()
-        for p in self.legalPositions:
-            trueDistance = util.manhattanDistance(p, pacmanPosition)
-            if emissionModel[trueDistance] > 0:
-                allPossible[p] = 1.0
 
+        # First, consider case where ghost is captured.
+        if noisyDistance is None:
+            jailPos = self.getJailPosition()
+            allPossible[jailPos] = 1.0
+        else:
+            #P(x_t|e_1:t) = P(e_t|x_t) * sum_x_t-1 (P(x_t|x_t-1) * P(x_t-1,e_t:t-1))
+            for p in self.legalPositions:
+                trueDistance = util.manhattanDistance(p, pacmanPosition)
+                cond_prob_ev_t = emissionModel[trueDistance] #p(e_t|x_t)
+                # assume ghost is standing still?
+                allPossible[p] = cond_prob_ev_t * self.beliefs[p]
+               
         "*** END YOUR CODE HERE ***"
 
         allPossible.normalize()

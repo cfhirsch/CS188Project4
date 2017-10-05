@@ -1,0 +1,219 @@
+autograder.py:                      action = 'store_true',
+autograder.py:                    action = 'store_true',
+autograder.py:                    action = 'store_true',
+autograder.py:                    action = 'store_true',
+autograder.py:                    action = 'store_true',
+autograder.py:    print 'WARNING: this action will overwrite any solution files.'
+autograder.py:      or assuming a certain number of actions available from a given
+busters.py:from game import Actions
+busters.py:    def getLegalActions( self, agentIndex=0 ):
+busters.py:        Returns the legal actions for the agent specified.
+busters.py:            return PacmanRules.getLegalActions( self )
+busters.py:            return GhostRules.getLegalActions( self, agentIndex )
+busters.py:    def generateSuccessor( self, agentIndex, action):
+busters.py:        Returns the successor state after the specified agent takes the action.
+busters.py:        # Let agent's logic deal with its action's effects on the board
+busters.py:            PacmanRules.applyAction( state, action )
+busters.py:            GhostRules.applyAction( state, action, agentIndex )
+busters.py:    def getLegalPacmanActions( self ):
+busters.py:        return self.getLegalActions( 0 )
+busters.py:    def generatePacmanSuccessor( self, action ):
+busters.py:        return self.generateSuccessor( 0, action )
+busters.py:    def getLegalActions( state ):
+busters.py:        Returns a list of possible actions.
+busters.py:        return Actions.getPossibleActions( state.getPacmanState().configuration, state.data.layout.walls )
+busters.py:    getLegalActions = staticmethod( getLegalActions )
+busters.py:    def applyAction( state, action ):
+busters.py:        Edits the state to reflect the results of the action.
+busters.py:        legal = PacmanRules.getLegalActions( state )
+busters.py:        if action not in legal:
+busters.py:            raise "Illegal action", action
+busters.py:        vector = Actions.directionToVector( action, 1)
+busters.py:    applyAction = staticmethod( applyAction )
+busters.py:    def getLegalActions( state, ghostIndex ):
+busters.py:        return Actions.getPossibleActions( conf, state.data.layout.walls )
+busters.py:    getLegalActions = staticmethod( getLegalActions )
+busters.py:    def applyAction( state, action, ghostIndex):
+busters.py:        legal = GhostRules.getLegalActions( state, ghostIndex )
+busters.py:        if action not in legal:
+busters.py:            raise Exception("Illegal ghost action: " + str(action))
+busters.py:        vector = Actions.directionToVector( action, 1 )
+busters.py:    applyAction = staticmethod( applyAction )
+busters.py:    def getAction( self, state ):
+busters.py:        return random.choice( state.getLegalActions( self.index ) )
+busters.py:        actions = state.getLegalActions( self.index )
+busters.py:        prob = 1.0 / len( actions )
+busters.py:        return [( prob, action ) for action in actions]
+busters.py:    parser.add_option('-q', '--quietTextGraphics', action='store_true', dest='quietGraphics',
+busters.py:    parser.add_option('-f', '--fixRandomSeed', action='store_true', dest='fixRandomSeed',
+busters.py:    parser.add_option('-s', '--showGhosts', action='store_true', dest='showGhosts',
+bustersAgents.py:    def getAction(self, gameState):
+bustersAgents.py:        "Updates beliefs, then chooses an action based on updated beliefs."
+bustersAgents.py:        return self.chooseAction(gameState)
+bustersAgents.py:    def chooseAction(self, gameState):
+bustersAgents.py:    def getAction(self, gameState):
+bustersAgents.py:        return BustersAgent.getAction(self, gameState)
+bustersAgents.py:    def chooseAction(self, gameState):
+bustersAgents.py:        return KeyboardAgent.getAction(self, gameState)
+bustersAgents.py:from game import Actions
+bustersAgents.py:    def chooseAction(self, gameState):
+bustersAgents.py:        not yet been captured, then chooses an action that brings
+bustersAgents.py:        To find the successor position of a position after an action:
+bustersAgents.py:          successorPosition = Actions.getSuccessor(position, action)
+bustersAgents.py:        legal = [a for a in gameState.getLegalPacmanActions()]
+bustersGhostAgents.py:from game import Actions
+bustersGhostAgents.py:    "Chooses an action that distances the ghost from the other ghosts with probability spreadProb."
+bustersGhostAgents.py:        legalActions = state.getLegalActions( self.index )
+bustersGhostAgents.py:        actionVectors = [Actions.directionToVector( a, speed ) for a in legalActions]
+bustersGhostAgents.py:        newPositions = [( pos[0]+a[0], pos[1]+a[1] ) for a in actionVectors]
+bustersGhostAgents.py:        # for each action, get the sum of inverse squared distances to the other ghosts
+bustersGhostAgents.py:        for action, distance in zip(legalActions, sumOfDistances):
+bustersGhostAgents.py:            if distance == bestDistance: distribution[action] += self.spreadProb / numBest
+bustersGhostAgents.py:            distribution[action] += (1 - self.spreadProb) / len(legalActions)
+game.py:    An agent must define a getAction method, but may also define the
+game.py:    def getAction(self, state):
+game.py:        must return an action from Directions.{North, South, East, West, Stop}
+game.py:        configuration by the action vector.  This is a low-level call and does
+game.py:        Actions are movement vectors.
+game.py:        direction = Actions.vectorToDirection(vector)
+game.py:class Actions:
+game.py:    A collection of static methods for manipulating move actions.
+game.py:    def reverseDirection(action):
+game.py:        if action == Directions.NORTH:
+game.py:        if action == Directions.SOUTH:
+game.py:        if action == Directions.EAST:
+game.py:        if action == Directions.WEST:
+game.py:        return action
+game.py:        dx, dy =  Actions._directions[direction]
+game.py:    def getPossibleActions(config, walls):
+game.py:        if (abs(x - x_int) + abs(y - y_int)  > Actions.TOLERANCE):
+game.py:        for dir, vec in Actions._directionsAsList:
+game.py:    getPossibleActions = staticmethod(getPossibleActions)
+game.py:        for dir, vec in Actions._directionsAsList:
+game.py:    def getSuccessor(position, action):
+game.py:        dx, dy = Actions.directionToVector(action)
+game.py:    The Game manages the control flow, soliciting actions from agents.
+game.py:            skip_action = False
+game.py:                            skip_action = True
+game.py:            # Solicit an action
+game.py:            action = None
+game.py:                    timed_func = TimeoutFunction(agent.getAction, int(self.rules.getMoveTimeout(agentIndex)) - int(move_time))
+game.py:                        if skip_action:
+game.py:                        action = timed_func( observation )
+game.py:                action = agent.getAction(observation)
+game.py:            # Execute the action
+game.py:            self.moveHistory.append( (agentIndex, action) )
+game.py:                    self.state = self.state.generateSuccessor( agentIndex, action )
+game.py:                self.state = self.state.generateSuccessor( agentIndex, action )
+game.py:                boinc.set_fraction_done(self.getProgress())
+ghostAgents.py:from game import Actions
+ghostAgents.py:    def getAction( self, state ):
+ghostAgents.py:        "Returns a Counter encoding a distribution over actions from the provided state."
+ghostAgents.py:    "A ghost that chooses a legal action uniformly at random."
+ghostAgents.py:        for a in state.getLegalActions( self.index ): dist[a] = 1.0
+ghostAgents.py:        legalActions = state.getLegalActions( self.index )
+ghostAgents.py:        actionVectors = [Actions.directionToVector( a, speed ) for a in legalActions]
+ghostAgents.py:        newPositions = [( pos[0]+a[0], pos[1]+a[1] ) for a in actionVectors]
+ghostAgents.py:        # Select best actions given the state
+ghostAgents.py:        bestActions = [action for action, distance in zip( legalActions, distancesToPacman ) if distance == bestScore]
+ghostAgents.py:        for a in bestActions: dist[a] = bestProb / len(bestActions)
+ghostAgents.py:        for a in legalActions: dist[a] += ( 1-bestProb ) / len(legalActions)
+inference.py:        actionDist = self.ghostAgent.getDistribution(gameState)
+inference.py:        for action, prob in actionDist.items():
+inference.py:            successorPosition = game.Actions.getSuccessor(ghostPosition, action)
+inference.py:    actionDist = agent.getDistribution(gameState)
+inference.py:    for action, prob in actionDist.items():
+inference.py:        successorPosition = game.Actions.getSuccessor(ghostPosition, action)
+keyboardAgents.py:    def getAction( self, state):
+keyboardAgents.py:        legal = state.getLegalActions(self.index)
+pacman.py:from game import Actions
+pacman.py:    # static variable keeps track of which states have had getLegalActions called
+pacman.py:    def getLegalActions( self, agentIndex=0 ):
+pacman.py:        Returns the legal actions for the agent specified.
+pacman.py:            return PacmanRules.getLegalActions( self )
+pacman.py:            return GhostRules.getLegalActions( self, agentIndex )
+pacman.py:    def generateSuccessor( self, agentIndex, action):
+pacman.py:        Returns the successor state after the specified agent takes the action.
+pacman.py:        # Let agent's logic deal with its action's effects on the board
+pacman.py:            PacmanRules.applyAction( state, action )
+pacman.py:            GhostRules.applyAction( state, action, agentIndex )
+pacman.py:    def getLegalPacmanActions( self ):
+pacman.py:        return self.getLegalActions( 0 )
+pacman.py:    def generatePacmanSuccessor( self, action ):
+pacman.py:        return self.generateSuccessor( 0, action )
+pacman.py:    def getLegalActions( state ):
+pacman.py:        Returns a list of possible actions.
+pacman.py:        return Actions.getPossibleActions( state.getPacmanState().configuration, state.data.layout.walls )
+pacman.py:    getLegalActions = staticmethod( getLegalActions )
+pacman.py:    def applyAction( state, action ):
+pacman.py:        Edits the state to reflect the results of the action.
+pacman.py:        legal = PacmanRules.getLegalActions( state )
+pacman.py:        if action not in legal:
+pacman.py:            raise Exception("Illegal action " + str(action))
+pacman.py:        vector = Actions.directionToVector( action, PacmanRules.PACMAN_SPEED )
+pacman.py:    applyAction = staticmethod( applyAction )
+pacman.py:    def getLegalActions( state, ghostIndex ):
+pacman.py:        possibleActions = Actions.getPossibleActions( conf, state.data.layout.walls )
+pacman.py:        reverse = Actions.reverseDirection( conf.direction )
+pacman.py:        if Directions.STOP in possibleActions:
+pacman.py:            possibleActions.remove( Directions.STOP )
+pacman.py:        if reverse in possibleActions and len( possibleActions ) > 1:
+pacman.py:            possibleActions.remove( reverse )
+pacman.py:        return possibleActions
+pacman.py:    getLegalActions = staticmethod( getLegalActions )
+pacman.py:    def applyAction( state, action, ghostIndex):
+pacman.py:        legal = GhostRules.getLegalActions( state, ghostIndex )
+pacman.py:        if action not in legal:
+pacman.py:            raise Exception("Illegal ghost action " + str(action))
+pacman.py:        vector = Actions.directionToVector( action, speed )
+pacman.py:    applyAction = staticmethod( applyAction )
+pacman.py:    parser.add_option('-t', '--textGraphics', action='store_true', dest='textGraphics',
+pacman.py:    parser.add_option('-q', '--quietTextGraphics', action='store_true', dest='quietGraphics',
+pacman.py:    parser.add_option('-f', '--fixRandomSeed', action='store_true', dest='fixRandomSeed',
+pacman.py:    parser.add_option('-r', '--recordActions', action='store_true', dest='record',
+pacman.py:    parser.add_option('-c', '--catchExceptions', action='store_true', dest='catchExceptions',
+pacman.py:def replayGame( layout, actions, display ):
+pacman.py:    for action in actions:
+pacman.py:            # Execute the action
+pacman.py:        state = state.generateSuccessor( *action )
+pacman.py:            components = {'layout': layout, 'actions': game.moveHistory}
+trackingTestClasses.py:from game import Actions
+trackingTestClasses.py:        lines = solutionDict['correctActions'].split('\n')
+trackingTestClasses.py:        handle.write('# move_number action likelihood_dictionary\n')
+trackingTestClasses.py:        handle.write('correctActions: """\n')
+trackingTestClasses.py:    def getAction(self, gameState):
+trackingTestClasses.py:        "Updates beliefs, then chooses an action based on updated beliefs."
+trackingTestClasses.py:        action = random.choice([a for a in gameState.getLegalPacmanActions() if a != 'STOP'])
+trackingTestClasses.py:        self.answerList.append((self.numMoves, action, distributionList))
+trackingTestClasses.py:        return action
+trackingTestClasses.py:    def getAction(self, gameState):
+trackingTestClasses.py:        "Updates beliefs, then chooses an action based on updated beliefs."
+trackingTestClasses.py:        action = random.choice([a for a in gameState.getLegalPacmanActions() if a != 'STOP'])
+trackingTestClasses.py:        return action
+trackingTestClasses.py:        moveNum,action,dists = self.refSolution[self.numMoves]
+trackingTestClasses.py:        moveNum,action,dists = self.refSolution[self.numMoves]
+trackingTestClasses.py:    def getAction(self, gameState):
+trackingTestClasses.py:        "Updates beliefs, then chooses an action based on updated beliefs."
+trackingTestClasses.py:        moveNum,action,dists = self.refSolution[self.numMoves]
+trackingTestClasses.py:        return action
+trackingTestClasses.py:    def getAction(self, state):
+trackingTestClasses.py:        for a in state.getLegalActions( self.index ): dist[a] = 1.0
+trackingTestClasses.py:            action = self.sample( dist )
+trackingTestClasses.py:            return action
+trackingTestClasses.py:        for a in state.getLegalActions( self.index ): dist[a] = 1.0
+trackingTestClasses.py:    def getAction(self, state):
+trackingTestClasses.py:        for a in state.getLegalActions( self.index ):
+trackingTestClasses.py:            action = self.sample( dist )
+trackingTestClasses.py:            return action
+trackingTestClasses.py:        for a in state.getLegalActions( self.index ):
+trackingTestClasses.py:    "Chooses an action that distances the ghost from the other ghosts with probability spreadProb."
+trackingTestClasses.py:    def getAction(self, state):
+trackingTestClasses.py:            action = self.sample( dist )
+trackingTestClasses.py:            return action
+trackingTestClasses.py:        legalActions = state.getLegalActions( self.index )
+trackingTestClasses.py:        actionVectors = [Actions.directionToVector( a, speed ) for a in legalActions]
+trackingTestClasses.py:        newPositions = [( pos[0]+a[0], pos[1]+a[1] ) for a in actionVectors]
+trackingTestClasses.py:        # for each action, get the sum of inverse squared distances to the other ghosts
+trackingTestClasses.py:        for action, distance in zip(legalActions, sumOfDistances):
+trackingTestClasses.py:            if distance == bestDistance: distribution[action] += self.spreadProb / numBest
+trackingTestClasses.py:            distribution[action] += (1 - self.spreadProb) / len(legalActions)

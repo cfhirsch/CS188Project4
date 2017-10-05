@@ -224,7 +224,23 @@ class ExactInference(InferenceModule):
         positions after a time update from a particular position.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        #P(x_t|e_1:t) = P(e_t|x_t) * sum_x_t-1 (P(x_t|x_t-1) * P(x_t-1,e_t:t-1))
+        
+        allPossible = util.Counter()
+
+        # store the current ghostPosition so we can restore it later.
+        # ghostPosition = gameState.getGhostPosition(self.index)
+        
+        for oldPos in self.legalPositions:
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
+            for newPos, prob in newPosDist.items():
+                allPossible[newPos] += prob * self.beliefs[oldPos]
+               
+        "*** END YOUR CODE HERE ***"
+
+        allPossible.normalize()
+        self.beliefs = allPossible
 
     def getBeliefDistribution(self):
         return self.beliefs
